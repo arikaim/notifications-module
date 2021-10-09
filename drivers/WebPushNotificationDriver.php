@@ -9,12 +9,15 @@
 */
 namespace Arikaim\Modules\GithubApi\Drivers;
 
+use Minishlink\WebPush\WebPush;
+use Minishlink\WebPush\Subscription;
+
 use Arikaim\Core\Arikaim;
 use Arikaim\Core\Driver\Traits\Driver;
 use Arikaim\Core\Interfaces\Driver\DriverInterface;
-use Arikaim\Modules\Notifications\AbstractNotificationChannel;
+use Arikaim\Modules\Notifications\Channel\AbstractNotificationChannel;
 use Arikaim\Modules\Notifications\Message\MessageInterface;
-use Arikaim\Modules\Notifications\NotificationChannelInterface;
+use Arikaim\Modules\Notifications\Channel\NotificationChannelInterface;
 
 /**
  * WebPushNotificationDriver api driver class
@@ -31,8 +34,38 @@ class WebPushNotificationDriver extends AbstractNotificationChannel implements D
         $this->setDriverParams('webpush','notification.channel','WebPush notification','WebPush notification driver');      
     }
 
-    public function send(MessageInterface $message, $recipient): bool
+    /**
+     * Send notification message
+     *
+     * @param string|array|object|MessageInterface $message
+     * @param string|array|object $to
+     * @return boolean
+    */
+    public function send($message, $to): bool
     {
+        $message = $this->createMessage($message);
+        if ($message == null) {
+            // not valid message
+            return false;
+        }
+
+        $recepient = $this->createRecipient($to);
+        if ($recepient == null) {
+            // not valid recepient
+            return false;
+        }
+        
+        $subscriptin = Subscription::create([
+
+        ]);
+
+        $payload = 'content';
+        $webPush = new WebPush();
+
+        $report = $webPush->sendOneNotification($subscriptin,$payload);
+          
+        var_dump($report);
+
         return false;
     }
 

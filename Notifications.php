@@ -12,7 +12,7 @@ namespace Arikaim\Modules\Notifications;
 use Arikaim\Core\Extension\Module;
 use Arikaim\Core\Arikaim;
 use Arikaim\Modules\Notifications\Message\MessageInterface;
-use Arikaim\Modules\Notifications\NotificationChannelInterface;
+use Arikaim\Modules\Notifications\Channel\NotificationChannelInterface;
 
 /**
  * Notifications module class
@@ -26,21 +26,24 @@ class Notifications extends Module
      */
     public function install()
     {
-        $this->installDriver('Arikaim\\Modules\\Notifications\\Drivers\\WebPushNotificationDriver');      
+        // drivers
+        $this->installDriver('Arikaim\\Modules\\Notifications\\Drivers\\WebPushNotificationDriver');   
+        // service
+        $this->registerService('Notifications');
     }
 
     /**
      * Sen notification
      *
      * @param MessageInterface $message
-     * @param mixed $recipient
+     * @param mixed $to
      * @param string|array $channels
-     * @return void
+     * @return mixed
      */
-    public function send(MessageInterface $message, $recipient, $channels)
+    public function send($message, $to, $channels)
     {
         $channels = (\is_array($channels) == false) ? [$channels] : $channels;
-        
+
         foreach($channels as $channel) {
             // create channel driver
             $driver = Arikaim::get('driver')->create($channel);
@@ -48,7 +51,7 @@ class Notifications extends Module
                 continue;
             }
 
-            $result = $driver->send($message,$recipient);
+            $result = $driver->send($message,$to);
         }
     }
 }
