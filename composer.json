@@ -1,0 +1,20 @@
+{
+    "name": "arikaim/notifications-module",
+    "description": "Arikam CMS notifications module.",
+    "keywords": ["Module","Arikaim CMS notifications drivers module"],
+    "type": "arikaim-module",
+    "license": "GPL-3.0-or-later",
+    "authors": [{
+        "name": "Konstantin Atanasov",
+        "email": "info@arikaim.com",
+        "homepage": "http://arikaim.com"
+    }],
+    "require": {
+        "php": ">=7.2",
+        "arikaim/installer": "*",
+        "minishlink/web-push": "^6.0.0"
+    },
+    "extra": {
+        "path": "notifications"
+    }
+}

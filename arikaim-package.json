@@ -1,0 +1,15 @@
+{
+    "title": "Notifications",
+    "name": "notifications",
+    "version": "1.0.0",
+    "package-type": "module",
+    "class": "Notifications",
+    "description": "Notifications module.",
+    "type": "package",
+    "category": "notifications",
+    "repository": "https://github.com/arikaim/notifications-module",
+    "require": {
+        "extensions": [          
+        ]
+    }
+}
