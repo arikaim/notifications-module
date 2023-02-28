@@ -10,9 +10,6 @@
 namespace Arikaim\Modules\Notifications;
 
 use Arikaim\Core\Extension\Module;
-use Arikaim\Core\Arikaim;
-use Arikaim\Modules\Notifications\Message\MessageInterface;
-use Arikaim\Modules\Notifications\Channel\NotificationChannelInterface;
 
 /**
  * Notifications module class
@@ -27,31 +24,10 @@ class Notifications extends Module
     public function install()
     {
         // drivers
-        $this->installDriver('Arikaim\\Modules\\Notifications\\Drivers\\WebPushNotificationDriver');   
+        $this->installDriver('Arikaim\\Modules\\Notifications\\Drivers\\WebPushNotificationDriver');  
+        $this->installDriver('Arikaim\\Modules\\Notifications\\Drivers\\EmailNotificationDriver');   
+        $this->installDriver('Arikaim\\Modules\\Notifications\\Drivers\\TwilioNotificationDriver');   
         // service
         $this->registerService('Notifications');
-    }
-
-    /**
-     * Sen notification
-     *
-     * @param MessageInterface $message
-     * @param mixed $to
-     * @param string|array $channels
-     * @return mixed
-     */
-    public function send($message, $to, $channels)
-    {
-        $channels = (\is_array($channels) == false) ? [$channels] : $channels;
-
-        foreach($channels as $channel) {
-            // create channel driver
-            $driver = Arikaim::get('driver')->create($channel);
-            if (($driver instanceof NotificationChannelInterface) == false) {
-                continue;
-            }
-
-            $result = $driver->send($message,$to);
-        }
     }
 }

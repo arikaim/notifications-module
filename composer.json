@@ -10,9 +10,9 @@
         "homepage": "http://arikaim.com"
     }],
     "require": {
-        "php": ">=7.2",
         "arikaim/installer": "*",
-        "minishlink/web-push": "^6.0.0"
+        "minishlink/web-push": "^6.0.0",
+        "twilio/sdk": "^6.0.0"
     },
     "extra": {
         "path": "notifications"

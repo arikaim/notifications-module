@@ -22,15 +22,6 @@ interface MessageInterface
     public function isValid(): bool;
 
     /**
-     * Get option
-     *
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-     */
-    public function getOption(string $name, $default = null);
-
-    /**
      * Get param
      *
      * @param string $name

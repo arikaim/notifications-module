@@ -9,56 +9,69 @@
 */
 namespace Arikaim\Modules\Notifications\Service;
 
-
-use Arikaim\Core\System\Error\Traits\TaskErrors;
-
 use Arikaim\Core\Service\Service;
 use Arikaim\Core\Service\ServiceInterface;
-use Arikaim\Modules\Notifications\Notifications as NotificaitonsManager;
+use Arikaim\Modules\Notifications\Message\Message;
+
+use Arikaim\Modules\Notifications\NotificationChannelInterface;
+use Arikaim\Modules\Notifications\Message\MessageInterface;
 
 /**
  * Notifications service class
 */
 class Notifications extends Service implements ServiceInterface
 {
-    use TaskErrors;
-
     /**
-     * Notifications module class
+     * Boot service
      *
-     * @var NotificaitonsManager
+     * @return void
      */
-    private $manager;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
+    public function boot()
     {
         $this->setServiceName('notifications');
-        $this->manager = new NotificaitonsManager();
     }
-
+   
     /**
-     * Get notifications manager
+     * Send notification
      *
-     * @return NotificaitonsManager
-     */
-    public function getManager()
-    {
-        return $this->manager;
-    }
-
-    /**
-     * Sen notification
-     *
-     * @param MessageInterface $message
+     * @param mixed $message
      * @param mixed $to
-     * @param string|array $channels
-     * @return mixed
+     * @param string $driverName Notification driver name
+     * @param array|null $params
+     * @return bool
      */
-    public function send($message, $to, $channels)
+    public function send($message, $to, string $driverName, ?array $params = null): bool
     {
-        return $this->manager->send($message,$to,$channels);
+        global $container;
+
+        // create driver
+        $driver = $container->get('driver')->create($driverName);
+
+        if ($driver instanceof NotificationChannelInterface) {
+            $message = $this->createMessage($message,$params);
+
+            return $driver->send($message,$to);
+        }
+
+        return false;
+    }
+
+    /**
+     * Create message
+     *
+     * @param mixed $data
+     * @param array|null $params
+     * @return MessageInterface|null
+    */
+    public function createMessage($data, ?array $params = null): ?MessageInterface
+    {
+        if ($data instanceof MessageInterface) {
+            return $data;
+        }
+
+        $data = \is_object($data) ? $data->toArray() : $data;
+        $data = (\is_array($data) == false) ? ['content' => $data] : $data;
+
+        return new Message($data,$params);
     }
 }

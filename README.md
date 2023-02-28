@@ -8,7 +8,8 @@ Notifications for Arikaim CMS
 
 #### Notification channel drivers
  * WebPush 
-
+ * Email
+ * Twilio
 
 
 #### Requirements 
@@ -18,13 +19,7 @@ Notifications for Arikaim CMS
 #### Installation
 
 ```sh
+
 composer require arikaim/notifications-module
-```
 
-from Arikaim **Control Panel**
 ```
-Modules > Repository 
-```
-
-Download and install module
-

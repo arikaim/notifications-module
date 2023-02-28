@@ -47,33 +47,23 @@ class Message implements MessageInterface
     /**
      * Params
      *
-     * @var array
+     * @var array|null
      */
     protected $params = [];
-
-    /**
-     * Options
-     *
-     * @var array
-     */
-    protected $options = [];
 
     /**
      * Constructor
      *
      * @param array $data
-     * @param array $params
-     * @param array $options
+     * @param array|null $params
      */
-    public function __construct(array $data, array $params = [], array $options = [])
+    public function __construct(array $data, ?array $params = null)
     {
         $this->id = $data['id'] ?? $data['uuid'] ?? null;
         $this->content = $data['content'] ?? null;
         $this->subject = $data['subject'] ?? null;
         $this->contentType = $data['content_type'] ?? $data['contentType'] ?? $data['Content-Type'] ?? null;
-
-        $this->params = $params;
-        $this->options = $options;
+        $this->params = $params ?? $data['params'] ?? [];
     }
 
     /**
@@ -88,8 +78,7 @@ class Message implements MessageInterface
             'subject'      => $this->subject,
             'content'      => $this->content,
             'content_type' => $this->contentType,
-            'params'       => $this->params,
-            'options'      => $this->options,
+            'params'       => $this->params
         ];       
     }
 
@@ -123,18 +112,6 @@ class Message implements MessageInterface
     public function getParam(string $name, $default = null)
     {
         return $this->params[$name] ?? $default;
-    }
-
-    /**
-     * Get option
-     *
-     * @param string $name
-     * @param mixed $default
-     * @return mixed
-    */
-    public function getOption(string $name, $default = null)
-    {
-        return $this->options[$name] ?? $default;
     }
 
     /**
